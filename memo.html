@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CSS Template</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      /* Style the header */
+      .header {
+        background-color: #f1f1f1;
+        padding: 30px;
+        text-align: center;
+        font-size: 35px;
+      }
+
+      /* Container for flexboxes */
+      .row {
+        display: -webkit-flex;
+        display: flex;
+      }
+
+      /* Create three unequal columns that sits next to each other */
+      .column {
+        padding: 10px;
+        height: 300px; /* Should be removed. Only for demonstration */
+      }
+
+      /* Left and right column */
+      .column.side {
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+      }
+
+      /* Middle column */
+      .column.middle {
+        -webkit-flex: 2;
+        -ms-flex: 2;
+        flex: 2;
+      }
+
+      /* Style the footer */
+      .footer {
+        background-color: #f1f1f1;
+        padding: 10px;
+        text-align: center;
+      }
+
+      /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+      @media (max-width: 600px) {
+        .row {
+          -webkit-flex-direction: column;
+          flex-direction: column;
+        }
+      }
+    </style>
+    <style>
+      /* 基础样式和背景设置 */
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        font-family: "Segoe UI", Arial, sans-serif;
+        position: relative; /* 为绝对定位的玻璃容器提供参考 */
+      }
+
+      /* 页面内容区域 */
+      .page-content {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .content-section {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        color: white;
+      }
+
+      /* 玻璃态容器使用绝对定位，不影响其他元素 */
+      .glass-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 700px;
+        height: 375px;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        border-radius: 0px;
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 191, 255, 0.075);
+        box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px;
+        border: 0px rgba(255, 255, 255, 0.4) solid;
+        border-bottom: 0px rgba(40, 40, 40, 0.35) solid;
+        border-right: 0px rgba(40, 40, 40, 0.35) solid;
+        z-index: 10; /* 确保在其他内容之上 */
+      }
+
+      /* 容器内部内容样式 */
+      .glass-content {
+        text-align: center;
+        padding: 20px;
+      }
+
+      h1 {
+        font-weight: 300;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      p {
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 25px;
+        opacity: 0.9;
+      }
+
+      .btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+      }
+
+      .btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 768px) {
+        .glass-container {
+          width: 90%;
+          height: auto;
+          min-height: 300px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h2>CSS Template using Flexbox</h2>
+    <p>
+      In this example, we have created a header, three unequal columns and a
+      footer. On smaller screens, the columns will stack on top of each other.
+      Resize the browser window to see the responsive effect.
+    </p>
+    <p>
+      <strong>Note:</strong> Flexbox is not supported in Internet Explorer 10
+      and earlier versions.
+    </p>
+
+    <div class="header">
+      <h2>Header</h2>
+    </div>
+
+    <div class="row">
+      <div class="column side" style="background-color: #aaa">Column</div>
+      <div class="column middle" style="background-color: #bbbbbb">Column</div>
+      <div class="column side" style="background-color: #ccc">Column</div>
+    </div>
+
+    <div class="footer">
+      <p>Footer</p>
+    </div>
+  </body>
+</html>
