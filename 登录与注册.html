@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登录与注册 - 建筑美学平台</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-image: linear-gradient(
+          to bottom right,
+          #91defe,
+          #99c0f9,
+          #bdb6ec,
+          #d7b3e3,
+          #efb3d5,
+          #f9bccc
+        );
+        padding: 20px;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* 背景装饰元素 */
+      .bg-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: 0;
+      }
+
+      .circle-1 {
+        width: 300px;
+        height: 300px;
+        top: -150px;
+        left: -150px;
+      }
+
+      .circle-2 {
+        width: 200px;
+        height: 200px;
+        bottom: -100px;
+        right: -100px;
+      }
+
+      /* 主容器 */
+      .container {
+        display: flex;
+        width: 100%;
+        max-width: 1000px;
+        min-height: 600px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 1;
+      }
+
+      /* 左侧装饰区域 */
+      .side-panel {
+        flex: 1;
+        background: linear-gradient(
+          135deg,
+          rgba(145, 222, 254, 0.8),
+          rgba(157, 192, 249, 0.8)
+        );
+        color: white;
+        padding: 50px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      .logo {
+        font-size: 42px;
+        font-weight: 800;
+        margin-bottom: 20px;
+        background: linear-gradient(45deg, #1a237e, #3949ab);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .side-panel h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #2c3e50;
+      }
+
+      .side-panel p {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+        color: #34495e;
+      }
+
+      .features {
+        list-style: none;
+        text-align: left;
+        margin-top: 30px;
+      }
+
+      .features li {
+        margin-bottom: 15px;
+        font-size: 15px;
+        color: #2c3e50;
+      }
+
+      .features i {
+        color: #3949ab;
+        margin-right: 10px;
+      }
+
+      /* 右侧表单区域 */
+      .form-panel {
+        flex: 1;
+        padding: 50px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+      }
+
+      .form-container {
+        width: 100%;
+      }
+
+      .form-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .form-header h2 {
+        font-size: 32px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+      }
+
+      .form-header p {
+        color: #7f8c8d;
+        font-size: 16px;
+      }
+
+      /* 表单切换 */
+      .form-switcher {
+        display: flex;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #eee;
+      }
+
+      .form-switcher button {
+        flex: 1;
+        padding: 15px;
+        background: none;
+        border: none;
+        font-size: 18px;
+        font-weight: 600;
+        color: #95a5a6;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .form-switcher button.active {
+        color: #3949ab;
+      }
+
+      .form-switcher button.active::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: #3949ab;
+      }
+
+      /* 表单样式 */
+      .form {
+        display: none;
+      }
+
+      .form.active {
+        display: block;
+        animation: fadeIn 0.5s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      .input-group i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #7f8c8d;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 15px 15px 15px 45px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+
+      .input-group input:focus {
+        border-color: #3949ab;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.1);
+      }
+
+      .remember-forgot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        font-size: 14px;
+      }
+
+      .remember-me {
+        display: flex;
+        align-items: center;
+      }
+
+      .remember-me input {
+        margin-right: 8px;
+      }
+
+      .forgot-password {
+        color: #3949ab;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .forgot-password:hover {
+        color: #1a237e;
+        text-decoration: underline;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #3949ab, #1a237e);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+      }
+
+      .submit-btn:hover {
+        background: linear-gradient(135deg, #1a237e, #3949ab);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(57, 73, 171, 0.3);
+      }
+
+      .social-login {
+        margin-top: 30px;
+        text-align: center;
+      }
+
+      .social-login p {
+        color: #7f8c8d;
+        margin-bottom: 15px;
+        position: relative;
+      }
+
+      .social-login p::before,
+      .social-login p::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 30%;
+        height: 1px;
+        background: #e0e0e0;
+      }
+
+      .social-login p::before {
+        left: 0;
+      }
+
+      .social-login p::after {
+        right: 0;
+      }
+
+      .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .social-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .social-icon:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .social-icon.facebook {
+        background: #3b5998;
+      }
+
+      .social-icon.google {
+        background: #dd4b39;
+      }
+
+      .social-icon.twitter {
+        background: #1da1f2;
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+          max-width: 500px;
+        }
+
+        .side-panel {
+          padding: 30px;
+        }
+
+        .form-panel {
+          padding: 30px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .form-switcher button {
+          font-size: 16px;
+          padding: 12px;
+        }
+
+        .input-group input {
+          padding: 12px 12px 12px 40px;
+        }
+
+        .submit-btn {
+          padding: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 背景装饰 -->
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+
+    <!-- 主容器 -->
+    <div class="container">
+      <!-- 左侧装饰区域 -->
+      <div class="side-panel">
+        <div class="logo">筑光设计</div>
+        <h2>欢迎来到建筑美学平台</h2>
+        <p>
+          探索东西方建筑之美，发现传统与现代的完美融合。加入我们，开启您的设计之旅。
+        </p>
+
+        <ul class="features">
+          <li><i class="fas fa-check-circle"></i> 浏览海量建筑美学图片</li>
+          <li><i class="fas fa-check-circle"></i> 使用AI生成个性化海报</li>
+          <li><i class="fas fa-check-circle"></i> 收藏您喜爱的建筑风格</li>
+          <li><i class="fas fa-check-circle"></i> 参与社区讨论与分享</li>
+        </ul>
+      </div>
+
+      <!-- 右侧表单区域 -->
+      <div class="form-panel">
+        <div class="form-container">
+          <div class="form-header">
+            <h2>欢迎回来</h2>
+            <p>请登录您的账户或注册新账户</p>
+          </div>
+
+          <!-- 表单切换器 -->
+          <div class="form-switcher">
+            <button id="login-switcher" class="active">登录</button>
+            <button id="register-switcher">注册</button>
+          </div>
+
+          <!-- 登录表单 -->
+          <form id="login-form" class="form active">
+            <div class="input-group">
+              <i class="fas fa-user"></i>
+              <input
+                type="text"
+                id="login-email"
+                placeholder="邮箱地址"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <i class="fas fa-lock"></i>
+              <input
+                type="password"
+                id="login-password"
+                placeholder="密码"
+                required
+              />
+            </div>
+
+            <div class="remember-forgot">
+              <div class="remember-me">
+                <input type="checkbox" id="remember-me" />
+                <label for="remember-me">记住我</label>
+              </div>
+              <a href="#" class="forgot-password">忘记密码?</a>
+            </div>
+
+            <button type="submit" class="submit-btn">登录</button>
+
+            <div class="social-login">
+              <p>或使用其他方式登录</p>
+              <div class="social-icons">
+                <div class="social-icon facebook">
+                  <i class="fab fa-facebook-f"></i>
+                </div>
+                <div class="social-icon google">
+                  <i class="fab fa-google"></i>
+                </div>
+                <div class="social-icon twitter">
+                  <i class="fab fa-twitter"></i>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <!-- 注册表单 -->
+          <form id="register-form" class="form">
+            <div class="input-group">
+              <i class="fas fa-envelope"></i>
+              <input
+                type="email"
+                id="register-email"
+                placeholder="邮箱地址"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <i class="fas fa-lock"></i>
+              <input
+                type="password"
+                id="register-password"
+                placeholder="密码"
+                required
+              />
+            </div>
+
+            <div class="remember-forgot">
+              <div class="remember-me">
+                <input type="checkbox" id="agree-terms" required />
+                <label for="agree-terms"
+                  >我同意<a href="#" style="color: #3949ab; margin-left: 5px"
+                    >服务条款</a
+                  ></label
+                >
+              </div>
+            </div>
+
+            <button type="submit" class="submit-btn">注册</button>
+
+            <div class="social-login">
+              <p>或使用其他方式注册</p>
+              <div class="social-icons">
+                <div class="social-icon facebook">
+                  <i class="fab fa-facebook-f"></i>
+                </div>
+                <div class="social-icon google">
+                  <i class="fab fa-google"></i>
+                </div>
+                <div class="social-icon twitter">
+                  <i class="fab fa-twitter"></i>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 表单切换功能
+      const loginSwitcher = document.getElementById("login-switcher");
+      const registerSwitcher = document.getElementById("register-switcher");
+      const loginForm = document.getElementById("login-form");
+      const registerForm = document.getElementById("register-form");
+
+      // 切换到登录表单的函数
+      function switchToLoginForm() {
+        loginSwitcher.classList.add("active");
+        registerSwitcher.classList.remove("active");
+        loginForm.classList.add("active");
+        registerForm.classList.remove("active");
+      }
+
+      // 切换到注册表单的函数
+      function switchToRegisterForm() {
+        registerSwitcher.classList.add("active");
+        loginSwitcher.classList.remove("active");
+        registerForm.classList.add("active");
+        loginForm.classList.remove("active");
+      }
+
+      loginSwitcher.addEventListener("click", switchToLoginForm);
+
+      registerSwitcher.addEventListener("click", switchToRegisterForm);
+
+      // 表单提交处理
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const email = document.getElementById("login-email").value;
+          const password = document.getElementById("login-password").value;
+
+          // 这里应该发送到服务器进行验证
+          console.log("登录尝试:", { email, password });
+
+          // 简单模拟登录成功
+          if (email && password) {
+            alert("登录成功！正在跳转到首页...");
+
+            // 在实际应用中，这里会重定向到主页
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 1000);
+          }
+        });
+
+      document
+        .getElementById("register-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const email = document.getElementById("register-email").value;
+          const password = document.getElementById("register-password").value;
+          const agreeTerms = document.getElementById("agree-terms").checked;
+
+          // 简单验证
+          if (!agreeTerms) {
+            alert("请先同意服务条款！");
+            return;
+          }
+
+          // 这里应该发送到服务器进行注册
+          console.log("注册尝试:", { email, password });
+
+          // 模拟注册成功
+          if (email && password) {
+            alert("注册成功！已自动跳转到登录界面。");
+
+            // 自动填充登录表单
+            document.getElementById("login-email").value = email;
+
+            // 切换到登录表单
+            switchToLoginForm();
+
+            // 清空注册表单
+            this.reset();
+          }
+        });
+
+      // 社交登录按钮点击事件
+      document.querySelectorAll(".social-icon").forEach((icon) => {
+        icon.addEventListener("click", function () {
+          const platform = this.classList.contains("facebook")
+            ? "Facebook"
+            : this.classList.contains("google")
+            ? "Google"
+            : "Twitter";
+          alert(`将通过${platform}进行登录`);
+          // 在实际应用中，这里会调用相应的OAuth认证
+        });
+      });
+
+      // 忘记密码链接
+      document
+        .querySelector(".forgot-password")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          const email = prompt("请输入您的邮箱地址以重置密码:");
+          if (email) {
+            alert(`重置密码链接已发送到 ${email}，请查收邮件。`);
+          }
+        });
+    </script>
+  </body>
+</html>
