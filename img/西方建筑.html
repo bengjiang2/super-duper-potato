@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>西方建筑</title>
+    <style>
+      * {
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+        bottom: 0;
+        text-decoration: none;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-image: linear-gradient(
+          to bottom right,
+          #91defe,
+          #99c0f9,
+          #bdb6ec,
+          #d7b3e3,
+          #efb3d5,
+          #f9bccc
+        );
+        padding: 20px;
+        box-sizing: border-box;
+        overflow: auto;
+      }
+
+      /* 主容器 - 一行四列布局 */
+      .gallery-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        max-width: 1400px;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      /* 每个轮播图容器 */
+      .carousel-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 0; /* 防止内容溢出 */
+        min-width: 280px; /* 最小宽度 */
+      }
+
+      .shell {
+        width: 100%;
+        height: 400px; /* 固定高度 */
+        position: relative;
+        overflow: hidden;
+        border-radius: 15px;
+        box-shadow: 10px 15px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .images {
+        width: 500%;
+        height: 100%;
+        display: flex;
+        position: absolute;
+        left: 0;
+        transition: 0.5s ease-in-out;
+      }
+
+      .img {
+        width: 100%;
+        background-size: cover; /* 使用cover填充容器 */
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      /* 第一个轮播图图片 - 宫廷风 */
+      #carousel-1 .img:nth-child(1) {
+        background-image: url("哥特式/微信图片_2025-12-05_125434_223.jpg");
+      }
+      #carousel-1 .img:nth-child(2) {
+        background-image: url("哥特式/微信图片_2025-12-05_125442_011.jpg");
+      }
+      /* 第二个轮播图图片 - 民居风 */
+      #carousel-2 .img:nth-child(1) {
+        background-image: url("古罗马/微信图片_2025-12-05_125412_314.jpg");
+      }
+      #carousel-2 .img:nth-child(2) {
+        background-image: url("古罗马/微信图片_2025-12-05_125417_864.jpg");
+      }
+      /* 第三个轮播图图片 - 园林风 */
+      #carousel-3 .img:nth-child(1) {
+        background-image: url("现代主义/微信图片_2025-12-05_125506_925.jpg");
+      }
+      #carousel-3 .img:nth-child(2) {
+        background-image: url("现代主义/微信图片_2025-12-05_125512_713.jpg");
+      }
+      #carousel-3 .img:nth-child(3) {
+        background-image: url("现代主义/微信图片_2025-12-05_125514_752.jpg");
+      }
+      #carousel-3 .img:nth-child(4) {
+        background-image: url("现代主义/微信图片_2025-12-05_125516_864.jpg");
+      }
+      #carousel-3 .img:nth-child(5) {
+        background-image: url("现代主义/微信图片_2025-12-05_125518_927.jpg");
+      }
+
+      /* 第四个轮播图图片 - 宗教石窟 */
+      #carousel-4 .img:nth-child(1) {
+        background-image: url("古希腊/微信图片_2025-12-05_125304_821.jpg");
+      }
+      #carousel-4 .img:nth-child(2) {
+        background-image: url("古希腊/微信图片_2025-12-05_125311_036.jpg");
+      }
+      #carousel-4 .img:nth-child(3) {
+        background-image: url("古希腊/微信图片_2025-12-05_125314_925.jpg");
+      }
+      #carousel-4 .img:nth-child(4) {
+        background-image: url("古希腊/微信图片_2025-12-05_125316_752.jpg");
+      }
+
+      .min {
+        display: flex;
+        justify-content: space-evenly;
+        position: absolute;
+        bottom: 15px;
+        width: 40%;
+        z-index: 999;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .button {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        justify-content: space-between;
+        user-select: none;
+        align-items: center;
+      }
+
+      .m {
+        width: 10px;
+        height: 10px;
+        cursor: pointer;
+        border-radius: 50%;
+        border: solid rgba(255, 255, 255, 0.5);
+        background-color: #fff;
+        transition: background-color 0.3s;
+      }
+
+      .m.active {
+        background-color: #4361ee;
+      }
+
+      .button-left,
+      .button-right {
+        font-size: 24px;
+        background-color: rgba(160, 193, 255, 0.2);
+        padding: 0 10px;
+        cursor: pointer;
+        color: #fff;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+
+      .button-left:hover,
+      .button-right:hover {
+        background-color: rgba(160, 193, 255, 0.5);
+      }
+
+      /* 标题样式 */
+      .carousel-title {
+        text-align: center;
+        color: white;
+        margin-bottom: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        height: 30px;
+        width: 100%;
+      }
+
+      /* 响应式调整 */
+      @media (max-width: 1200px) {
+        .gallery-container {
+          max-width: 1100px;
+          gap: 15px;
+        }
+
+        .shell {
+          height: 350px;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .gallery-container {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 15px;
+          max-width: 900px;
+        }
+
+        .carousel-wrapper {
+          flex: 0 0 calc(50% - 10px);
+        }
+
+        .shell {
+          height: 300px;
+        }
+
+        .button-left,
+        .button-right {
+          font-size: 20px;
+          padding: 0 8px;
+        }
+
+        .min {
+          width: 50%;
+          bottom: 10px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .gallery-container {
+          flex-direction: column;
+          max-width: 500px;
+        }
+
+        .carousel-wrapper {
+          flex: 0 0 100%;
+          max-width: 400px;
+        }
+
+        .shell {
+          height: 250px;
+        }
+
+        .carousel-title {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="gallery-container">
+      <!-- 第一个轮播图 - 宫廷风 -->
+      <div class="carousel-wrapper">
+        <div class="carousel-title">哥特式</div>
+        <div class="shell" id="carousel-1">
+          <ul class="images">
+            <li class="img"></li>
+            <li class="img"></li>
+            <li class="img"></li>
+            <li class="img"></li>
+            <li class="img"></li>
+          </ul>
+          <ul class="min">
+            <li class="m active"></li>
+            <li class="m"></li>
+          </ul>
+          <div class="button">
+            <div class="button-left">&lt;</div>
+            <div class="button-right">&gt;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第二个轮播图 - 民居风 -->
+      <div class="carousel-wrapper">
+        <div class="carousel-title">古罗马</div>
+        <div class="shell" id="carousel-2">
+          <ul class="images">
+            <li class="img"></li>
+            <li class="img"></li>
+            <li class="img"></li>
+            <li class="img"></li>
+            <li class="img"></li>
+          </ul>
+          <ul class="min">
+            <li class="m active"></li>
+            <li class="m"></li>
+          </ul>
+          <div class="button">
+            <div class="button-left">&lt;</div>
+            <div class="button-right">&gt;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第三个轮播图 - 园林风 -->
+      <div class="carousel-wrapper">
+        <div class="carousel-title">现代主义</div>
+        <div class="shell" id="carousel-3">
+          <ul class="images">
+            <li class="img"></li>
+            <li class="img"></li>
+            <li class="img"></li>
+            <li class="img"></li>
+            <li class="img"></li>
+          </ul>
+          <ul class="min">
+            <li class="m active"></li>
+            <li class="m"></li>
+            <li class="m"></li>
+            <li class="m"></li>
+            <li class="m"></li>
+          </ul>
+          <div class="button">
+            <div class="button-left">&lt;</div>
+            <div class="button-right">&gt;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第四个轮播图 - 宗教石窟 -->
+      <div class="carousel-wrapper">
+        <div class="carousel-title">古希腊</div>
+        <div class="shell" id="carousel-4">
+          <ul class="images">
+            <li class="img"></li>
+            <li class="img"></li>
+            <li class="img"></li>
+            <li class="img"></li>
+            <li class="img"></li>
+          </ul>
+          <ul class="min">
+            <li class="m active"></li>
+            <li class="m"></li>
+            <li class="m"></li>
+            <li class="m"></li>
+          </ul>
+          <div class="button">
+            <div class="button-left">&lt;</div>
+            <div class="button-right">&gt;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 初始化所有轮播图
+      function initCarousel(carouselId) {
+        const carousel = document.getElementById(carouselId);
+        const left = carousel.querySelector(".button-left");
+        const right = carousel.querySelector(".button-right");
+        const m = carousel.querySelectorAll(".m");
+        const images = carousel.querySelector(".images");
+        let index = 0;
+        let time;
+        function updateIndicators() {
+          m.forEach((item, i) => {
+            if (i === index) {
+              item.classList.add("active");
+            } else {
+              item.classList.remove("active");
+            }
+          });
+        }
+
+        function position() {
+          images.style.left = index * -100 + "%";
+          updateIndicators();
+        }
+
+        function add() {
+          if (index >= m.length - 1) {
+            index = 0;
+          } else {
+            index++;
+          }
+        }
+
+        function desc() {
+          if (index < 1) {
+            index = m.length - 1;
+          } else {
+            index--;
+          }
+        }
+
+        function timer() {
+          time = setInterval(() => {
+            add();
+            position();
+          }, 3000);
+        }
+
+        left.addEventListener("click", () => {
+          desc();
+          position();
+          clearInterval(time);
+          timer();
+        });
+
+        right.addEventListener("click", () => {
+          add();
+          position();
+          clearInterval(time);
+          timer();
+        });
+
+        for (let i = 0; i < m.length; i++) {
+          m[i].addEventListener("click", () => {
+            index = i;
+            position();
+            clearInterval(time);
+            timer();
+          });
+        }
+
+        timer();
+      }
+
+      // 初始化四个轮播图
+      initCarousel("carousel-1");
+      initCarousel("carousel-2");
+      initCarousel("carousel-3");
+      initCarousel("carousel-4");
+    </script>
+  </body>
+</html>

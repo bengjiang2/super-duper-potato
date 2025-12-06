@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>通义千问图像生成</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-image: linear-gradient(
+        to bottom right,
+        #91defe,
+        #99c0f9,
+        #bdb6ec,
+        #d7b3e3,
+        #efb3d5,
+        #f9bccc
+      );
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        background: white;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 1000px;
+        min-height: 500px;
+        justify-content: center;
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 50px;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .form-group {
+        margin-bottom: 50px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 20px;
+        color: #555;
+        font-weight: bold;
+      }
+
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        min-height: 120px;
+        resize: vertical;
+        font-family: inherit;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 20px;
+      }
+
+      button {
+        flex: 1;
+        padding: 12px;
+        background: #4361ee;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #3a56d4;
+      }
+
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .loading {
+        text-align: center;
+        margin: 20px 0;
+        color: #666;
+        display: none;
+      }
+
+      .result {
+        margin-top: 30px;
+      }
+
+      #imageContainer {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      #generatedImage {
+        max-width: 100%;
+        max-height: 500px;
+        border-radius: 5px;
+        display: none;
+      }
+
+      .error {
+        background: #fee;
+        color: #c33;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+        display: none;
+      }
+
+      .success {
+        background: #efe;
+        color: #383;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎨 通义千问</h1>
+
+      <div class="form-group">
+        <label>📝 图像描述:</label>
+        <textarea
+          id="prompt"
+          rows="4"
+          placeholder="详细描述你想要生成的图像，例如：'一只坐在香蕉船上的可爱猫咪，阳光明媚的海滩背景，卡通风格'"
+        ></textarea>
+      </div>
+
+      <div class="button-group">
+        <button id="generateBtn">生成图像</button>
+      </div>
+
+      <div class="loading" id="loading">
+        <p>⏳ 正在生成图像，请稍候...</p>
+        <p><small>这通常需要10-30秒，请耐心等待</small></p>
+      </div>
+
+      <div class="error" id="error"></div>
+      <div class="success" id="success"></div>
+
+      <div class="result">
+        <div id="imageContainer">
+          <img id="generatedImage" alt="生成的图像" />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 获取DOM元素
+      const generateBtn = document.getElementById("generateBtn");
+      const promptInput = document.getElementById("prompt");
+      const loading = document.getElementById("loading");
+      const imageResult = document.getElementById("generatedImage");
+      const errorDiv = document.getElementById("error");
+      const successDiv = document.getElementById("success");
+
+      // 生成图像函数
+      async function generateImage() {
+        // 获取输入值
+        const prompt = promptInput.value.trim();
+        const size = "1664*928";
+
+        // 验证输入
+        if (!prompt) {
+          showError("请输入图像描述");
+          return;
+        }
+
+        if (prompt.length > 800) {
+          showError("描述过长，请控制在800字符以内");
+          return;
+        }
+
+        // 显示加载状态
+        loading.style.display = "block";
+        generateBtn.disabled = true;
+        imageResult.style.display = "none";
+        errorDiv.style.display = "none";
+        successDiv.style.display = "none";
+
+        try {
+          console.log("发送生成请求...");
+
+          // 调用后端API
+          const response = await fetch("/api/generate/image", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              prompt: prompt,
+              model: "qwen-image-plus",
+              size: size,
+            }),
+          });
+
+          const data = await response.json();
+          console.log("API响应:", data);
+
+          // 隐藏加载状态
+          loading.style.display = "none";
+          generateBtn.disabled = false;
+
+          if (!response.ok || !data.success) {
+            // 显示错误
+            const errorMsg = data.error || data.message || "生成失败";
+            const code = data.code ? ` (代码: ${data.code})` : "";
+            showError("❌ 生成失败: " + errorMsg + code);
+            return;
+          }
+
+          // 显示成功消息
+          showSuccess("✅ 图像生成成功！");
+
+          // 处理返回的图像数据
+          if (data.output && data.output.choices && data.output.choices[0]) {
+            const choice = data.output.choices[0];
+
+            if (choice.message && choice.message.content) {
+              const content = choice.message.content;
+
+              // 查找图像URL
+              let imageUrl = null;
+
+              if (content[0] && content[0].image) {
+                imageUrl = content[0].image;
+              } else if (content[0] && content[0].url) {
+                imageUrl = content[0].url;
+              } else if (
+                data.output.results &&
+                data.output.results[0] &&
+                data.output.results[0].url
+              ) {
+                imageUrl = data.output.results[0].url;
+              }
+
+              if (imageUrl) {
+                imageResult.src = imageUrl;
+                imageResult.style.display = "block";
+              }
+            }
+          }
+        } catch (error) {
+          // 隐藏加载状态
+          loading.style.display = "none";
+          generateBtn.disabled = false;
+
+          // 显示错误
+          showError("❌ 网络错误: " + error.message);
+          console.error("生成失败:", error);
+        }
+      }
+
+      // 显示错误函数
+      function showError(message) {
+        errorDiv.textContent = message;
+        errorDiv.style.display = "block";
+      }
+
+      // 显示成功函数
+      function showSuccess(message) {
+        successDiv.textContent = message;
+        successDiv.style.display = "block";
+      }
+
+      // 绑定按钮点击事件
+      generateBtn.addEventListener("click", generateImage);
+
+      // 按Enter键触发生成（在textarea中按Ctrl+Enter）
+      promptInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && e.ctrlKey) {
+          e.preventDefault();
+          generateImage();
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,216 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>CSS Template</title>
+    <title>筑光海报</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: Arial, Helvetica, sans-serif;
-      }
-
-      /* Style the header */
-      .header {
-        background-color: #f1f1f1;
-        padding: 30px;
-        text-align: center;
-        font-size: 35px;
-      }
-
-      /* Container for flexboxes */
-      .row {
-        display: -webkit-flex;
-        display: flex;
-      }
-
-      /* Create three unequal columns that sits next to each other */
-      .column {
-        padding: 10px;
-        height: 300px; /* Should be removed. Only for demonstration */
-      }
-
-      /* Left and right column */
-      .column.side {
-        -webkit-flex: 1;
-        -ms-flex: 1;
-        flex: 1;
-      }
-
-      /* Middle column */
-      .column.middle {
-        -webkit-flex: 2;
-        -ms-flex: 2;
-        flex: 2;
-      }
-
-      /* Style the footer */
-      .footer {
-        background-color: #f1f1f1;
-        padding: 10px;
-        text-align: center;
-      }
-
-      /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
-      @media (max-width: 600px) {
-        .row {
-          -webkit-flex-direction: column;
-          flex-direction: column;
-        }
-      }
-    </style>
-    <style>
-      /* 基础样式和背景设置 */
-      body {
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        background: linear-gradient(135deg, #6e8efb, #a777e3);
-        font-family: "Segoe UI", Arial, sans-serif;
-        position: relative; /* 为绝对定位的玻璃容器提供参考 */
-      }
-
-      /* 页面内容区域 */
-      .page-content {
-        padding: 20px;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      .content-section {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 20px;
-        margin-bottom: 20px;
-        border-radius: 10px;
-        color: white;
-      }
-
-      /* 玻璃态容器使用绝对定位，不影响其他元素 */
-      .glass-container {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 700px;
-        height: 375px;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-        border-radius: 0px;
-        backdrop-filter: blur(4px);
-        background-color: rgba(0, 191, 255, 0.075);
-        box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px;
-        border: 0px rgba(255, 255, 255, 0.4) solid;
-        border-bottom: 0px rgba(40, 40, 40, 0.35) solid;
-        border-right: 0px rgba(40, 40, 40, 0.35) solid;
-        z-index: 10; /* 确保在其他内容之上 */
-      }
-
-      /* 容器内部内容样式 */
-      .glass-content {
-        text-align: center;
-        padding: 20px;
-      }
-
-      h1 {
-        font-weight: 300;
-        margin-bottom: 15px;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      }
-
-      p {
-        font-size: 18px;
-        line-height: 1.6;
-        margin-bottom: 25px;
-        opacity: 0.9;
-      }
-
-      .btn {
-        background: rgba(255, 255, 255, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: white;
-        padding: 12px 30px;
-        border-radius: 30px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(5px);
-      }
-
-      .btn:hover {
-        background: rgba(255, 255, 255, 0.3);
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      /* 响应式设计 */
-      @media (max-width: 768px) {
-        .glass-container {
-          width: 90%;
-          height: auto;
-          min-height: 300px;
-        }
-      }
-    </style>
   </head>
+  <style>
+    * {
+      margin: 0%;
+    }
+    .background-container {
+      background-image: url("微信图片_20251128103233_31_92.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      height: 100vh;
+      width: 100%;
+    }
+    nav {
+      background: #2c3e50;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+    }
+    a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      padding: 8px 12px;
+    }
+    a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .content {
+      padding: 20px;
+    }
+    .first {
+      font-size: 50px; /* 放大字体 */
+      font-weight: bold; /* 加粗 */
+      margin-bottom: 300px; /* 与下一行的间距 */
+      line-height: 1.2; /* 行高 */
+      text-align: center;
+      padding-top: 150px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .second {
+      font-size: 1.5rem; /* 正常大小 */
+      color: #7f8c8d; /* 灰色 */
+      line-height: 1.6;
+      text-align: center;
+    }
+  </style>
   <body>
-    <h2>CSS Template using Flexbox</h2>
-    <p>
-      In this example, we have created a header, three unequal columns and a
-      footer. On smaller screens, the columns will stack on top of each other.
-      Resize the browser window to see the responsive effect.
-    </p>
-    <p>
-      <strong>Note:</strong> Flexbox is not supported in Internet Explorer 10
-      and earlier versions.
-    </p>
-
-    <div
-      class="header"
-      style="
-        background: #2a7b9b;
-        background: linear-gradient(
-          90deg,
-          rgba(42, 123, 155, 1) 0%,
-          rgba(87, 199, 133, 1) 50%,
-          rgba(237, 221, 83, 1) 100%
-        );
-      "
-    >
-      <h2>Header</h2>
-    </div>
-    <div
-      class="column middle"
-      style="
-        background: #2a7b9b;
-        background: linear-gradient(
-          90deg,
-          rgba(42, 123, 155, 1) 0%,
-          rgba(87, 199, 133, 1) 50%,
-          rgba(237, 221, 83, 1) 100%
-        );
-      "
-    >
-      Column
-    </div>
-    <div
-      class="footer"
-      style="
-        background: #2a7b9b;
-        background: linear-gradient(
-          90deg,
-          rgba(42, 123, 155, 1) 0%,
-          rgba(87, 199, 133, 1) 50%,
-          rgba(237, 221, 83, 1) 100%
-        );
-      "
-    >
-      <p>Footer</p>
+    <div class="background-container">
+      <nav>
+        <div>
+          <a href="index.html">筑光海报</a>
+          <a href="http://localhost:3000">海报生成器</a>
+          <a href="img\西方建筑.html">西方建筑</a>
+          <a href="img\东方建筑.html">东方建筑</a>
+        </div>
+        <div>
+          <a href="登陆.html">登陆</a>
+          <a href="注册.html">注册</a>
+        </div>
+      </nav>
+      <div class="first">用海报，解构东西方建筑美学</div>
+      <div class="second">融合传统与现代，生成专属于你的艺术海报</div>
     </div>
   </body>
 </html>
